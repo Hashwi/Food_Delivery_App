@@ -1,29 +1,36 @@
-import React from 'react'
-import classes from './Cart.module.css'
+import classes from './CheckOut.module.css';
 
-const CheckOut = () => {
+const Checkout = (props) => {
+  const confirmHandler = (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <form>
-        <div className={classes.control}>
-            <lable htmlFor="name">Your Name</lable>
-            <input type='text' id='name'/>
-        </div>
-        <div className={classes.control}>
-            <lable htmlFor="street">Street</lable>
-            <input type='text' id='street'/>
-        </div>
-        <div className={classes.control}>
-            <lable htmlFor="postal">Postal Code</lable>
-            <input type='text' id='postal'/>
-        </div>
-        <div className={classes.control}>
-            <lable htmlFor="city">City</lable>
-            <input type='text' id='city'/>
-        </div>
-        <button>Confirm</button>
+    <form className={classes.form} onSubmit={confirmHandler}>
+      <div className={classes.control}>
+        <label htmlFor='name'>Your Name</label>
+        <input type='text' id='name' />
+      </div>
+      <div className={classes.control}>
+        <label htmlFor='street'>Street</label>
+        <input type='text' id='street' />
+      </div>
+      <div className={classes.control}>
+        <label htmlFor='postal'>Postal Code</label>
+        <input type='text' id='postal' />
+      </div>
+      <div className={classes.control}>
+        <label htmlFor='city'>City</label>
+        <input type='text' id='city' />
+      </div>
+      <div className={classes.actions}>
+        <button type='button' onClick={props.onCancel}>
+          Cancel
+        </button>
+        <button className={classes.submit}>Confirm</button>
+      </div>
     </form>
-    
-  )
-}
+  );
+};
 
-export default CheckOut
+export default Checkout;
