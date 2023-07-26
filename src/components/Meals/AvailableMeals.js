@@ -26,8 +26,7 @@ const AvailableMeals = () => {
     } 
     fetchMeals()
   },[])
-
-
+  
   const mealsList = meals.map((meal) => (
     <MealItem
       key={meal.id}
