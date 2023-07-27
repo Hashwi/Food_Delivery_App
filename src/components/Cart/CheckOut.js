@@ -2,7 +2,16 @@ import { useRef, useState } from "react";
 import classes from "./CheckOut.module.css";
 
 const isEmpty = (value) => value.trim() === "";
-const isValidPostalCode = (value) => /^[0-9]{5}(?:-[0-9]{4})?$/.test(value);
+const isValidPostalCode = (value) => {
+  // Check if the value is a string and has a length of 5
+  if (typeof value === 'string' && value.length === 5) {
+    // Check if all characters are digits (numbers)
+    return value.split('').every((char) => !isNaN(char));
+  }
+  return false;
+};
+
+// const isValidPostalCode = (value) => /^[0-9]{5}(?:-[0-9]{4})?$/.test(value);
 
 const Checkout = (props) => {
   const [formInputValidity, setFormInputValidity] = useState({
@@ -46,7 +55,15 @@ const Checkout = (props) => {
     if (!formIsValid) {
       return;
     }
+    props.onConfirm({
+      name: enteredName,
+      street: enteredStreet,
+      city: enteredCity,
+      postalCode: enteredPostalCode
+    })
   };
+
+ 
 
   return (
     <form className={classes.form} onSubmit={confirmHandler}>
