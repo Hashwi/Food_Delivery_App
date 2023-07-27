@@ -9,7 +9,7 @@ import CheckOut from "./CheckOut";
 const Cart = (props) => {
   const cartCtx = useContext(CartContext);
   const [isCheckOut, setIsCheckOut] = useState(false);
-  const [isSubmitting, setisSubmittting] = useState(false)
+  const [didSubmit, setDidSubmit] = useState(false);
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
   const hasItems = cartCtx.items.length > 0;
@@ -26,19 +26,20 @@ const Cart = (props) => {
     setIsCheckOut(true);
   };
 
-  const submitOrderHandler =  async (userData) => {
-    setisSubmittting(true)
-   await fetch(
+  const submitOrderHandler = async (userData) => {
+    setDidSubmit(false); // Reset the didSubmit state
+    setIsCheckOut(false); // Reset the isCheckOut state
+    setDidSubmit(true);
+    await fetch(
       "https://react-http-379a1-default-rtdb.firebaseio.com/orders.json",
       {
         method: "POST",
         body: JSON.stringify({
           user: userData,
           orderedItems: cartCtx.items,
-        })
-      });
-
-      setisSubmittting(false)
+        }),
+      }
+    );
   };
 
   const cartItems = (
@@ -69,17 +70,24 @@ const Cart = (props) => {
     </div>
   );
 
-  return (
-    <Modal onClose={props.onClose}>
+  const cartModalContent = (
+    <>
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckOut && (
-        <CheckOut onConfirm={submitOrderHandler} onCancel={props.onClose} />
-      )}
+      {isCheckOut && <CheckOut onConfirm={submitOrderHandler} onCancel={props.onClose} />}
       {!isCheckOut && modelAction}
+    </>
+  );
+
+  const didSubmitModalContent = <p>Successfully sent the Order!</p>;
+
+  return (
+    <Modal onClose={props.onClose}>
+      {!didSubmit && cartModalContent}
+      {didSubmit && didSubmitModalContent}
     </Modal>
   );
 };
