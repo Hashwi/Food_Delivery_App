@@ -38,8 +38,8 @@ const Cart = (props) => {
           user: userData,
           orderedItems: cartCtx.items,
         }),
-      }
-    );
+      });
+      cartCtx.clearCart()
   };
 
   const cartItems = (
@@ -77,12 +77,23 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckOut && <CheckOut onConfirm={submitOrderHandler} onCancel={props.onClose} />}
+      {isCheckOut && (
+        <CheckOut onConfirm={submitOrderHandler} onCancel={props.onClose} />
+      )}
       {!isCheckOut && modelAction}
     </>
   );
 
-  const didSubmitModalContent = <p>Successfully sent the Order!</p>;
+  const didSubmitModalContent = (
+    <>
+      <p>Successfully sent the Order!</p>
+      <div className={classes.actions}>
+        <button className={classes.button} onClick={props.onClose}>
+          Close
+        </button>
+      </div>
+    </>
+  );
 
   return (
     <Modal onClose={props.onClose}>
